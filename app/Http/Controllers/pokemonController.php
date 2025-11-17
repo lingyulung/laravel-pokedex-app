@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Exception;
 use Illuminate\Http\Client\Pool;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use stdClass;
 
@@ -15,9 +16,14 @@ class pokemonController extends Controller
     public function index(Request $request) {
         try {
 
+            
             $page = $request->get('page', 0);
             $limit = $request->get('limit', 20);
 
+            if (Cache::has('p' . $page . 'l' . $limit)) {
+                return Cache::get('p' . $page . 'l' . $limit);
+            }
+            
             if ($page === 0) {
                 $offset = 0;
             } else {
@@ -68,6 +74,8 @@ class pokemonController extends Controller
 
                 // dd($list->toJson());
                 // dd($filteredData);
+
+                Cache::add('p' . $page . 'l' . $limit, $filteredData, now()->addDay());
 
                 return $filteredData;
                 // return $list->values();
