@@ -4,7 +4,9 @@ This project contains api routes used to display Pokemon data for a Pokedex App.
 
 ## Getting Started
 
-Firstly, we should install the project dependencies:
+This project requires a php version of "^8.2"
+
+Install the project dependencies:
 
 ```bash
 composer install
