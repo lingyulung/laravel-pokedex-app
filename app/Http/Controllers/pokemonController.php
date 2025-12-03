@@ -16,10 +16,10 @@ class pokemonController extends Controller
     public function index(Request $request) {
         try {
 
-            
             $page = $request->get('page', 0);
             $limit = $request->get('limit', 20);
 
+            // Return cached response if it exists
             if (Cache::has('p' . $page . 'l' . $limit)) {
                 return Cache::get('p' . $page . 'l' . $limit);
             }
@@ -40,9 +40,12 @@ class pokemonController extends Controller
             if ($response->successful()) {
                 $data = collect($response['results']);
                 
+                // Make request to get pokemon details for each of the returned pokemons
                 $detailResponse = Http::pool(fn (Pool $pool) => $data->map(fn($pokemon) => $pool->get($pokemon['url'])));
 
                 $list = collect($detailResponse)->map(function ($res) {
+
+                    // Get the required information from the details
                     if ($res->ok()) {
                         $info = $res;
 
@@ -72,14 +75,10 @@ class pokemonController extends Controller
                 $filteredData->data = $list;
                 $filteredData->hasMorePages = isset($response['next']) ? true : false;
 
-                // dd($list->toJson());
-                // dd($filteredData);
-
+                // Cache the response
                 Cache::add('p' . $page . 'l' . $limit, $filteredData, now()->addDay());
 
                 return $filteredData;
-                // return $list->values();
-                // return response()->json($list->dump());
 
             }
             
