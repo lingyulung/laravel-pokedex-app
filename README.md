@@ -12,6 +12,20 @@ Install the project dependencies:
 composer install
 ```
 
+Be sure to create an .env file with everything in .env.example and change CACHE_STORE from "database" to "file".
+
+You also need put the APP_KEY into .env. You may get it from the project owner.
+
+Run the following steps:
+
+```bash
+# Create the SQLite database file
+touch database/database.sqlite
+
+# Run migrations to create all required tables
+php artisan migrate
+```
+
 Then serve the project files so that the frontend/client may make requests to it for the data:
 
 ```bash
