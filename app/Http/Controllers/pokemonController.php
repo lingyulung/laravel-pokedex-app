@@ -9,8 +9,6 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use stdClass;
 
-use function PHPUnit\Framework\isEmpty;
-
 class pokemonController extends Controller
 {
     public function index(Request $request) {

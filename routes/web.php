@@ -7,10 +7,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/test',function () {
-    return 'Testing this route';
-});
-
 Route::get('/api/pokemons', [pokemonController::class, 'index']);
 
 Route::get('/api/pokemons/search/{name}', [pokemonController::class, 'search']);
